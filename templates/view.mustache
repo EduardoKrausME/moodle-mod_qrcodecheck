@@ -1,0 +1,68 @@
+{{!
+    This file is part of Moodle - https://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template mod_qrcodecheck/view
+
+    Example context (json):
+    {
+        Aqui tem que criar o context em inglês
+    }
+}}
+<div class="mod-qrcodecheck-view">
+    <div class="mb-4">{{{intro}}}</div>
+
+    {{#registered}}
+        <div class="alert alert-success">
+            <strong>{{#str}}registered, qrcodecheck{{/str}}</strong><br>
+            {{registeredtime}} - {{ipstatus}}
+        </div>
+    {{/registered}}
+    {{^registered}}
+        <div class="alert alert-secondary">{{#str}}notregisteredyet, qrcodecheck{{/str}}</div>
+    {{/registered}}
+
+    {{#canmanage}}
+        <div class="card mt-4">
+            <div class="card-body">
+                <h3 class="h5">{{#str}}teachercontrols, qrcodecheck{{/str}}</h3>
+                {{#hasactive}}
+                    <p>{{#str}}activesession, qrcodecheck{{/str}}: {{sessionstarted}}</p>
+                    <div class="d-flex flex-wrap gap-2">
+                        <a class="btn btn-primary" href="{{projecturl}}">{{#str}}openprojection, qrcodecheck{{/str}}</a>
+                        <form method="post" action="{{sessionaction}}">
+                            <input type="hidden" name="id" value="{{cmid}}">
+                            <input type="hidden" name="action" value="new">
+                            <input type="hidden" name="sesskey" value="{{sesskey}}">
+                            <button type="submit" class="btn btn-outline-primary">{{#str}}newsession, qrcodecheck{{/str}}</button>
+                        </form>
+                    </div>
+                {{/hasactive}}
+                {{^hasactive}}
+                    <form method="post" action="{{sessionaction}}">
+                        <input type="hidden" name="id" value="{{cmid}}">
+                        <input type="hidden" name="action" value="start">
+                        <input type="hidden" name="sesskey" value="{{sesskey}}">
+                        <button type="submit" class="btn btn-primary">{{#str}}startsession, qrcodecheck{{/str}}</button>
+                    </form>
+                {{/hasactive}}
+                {{#canreport}}
+                    <a class="btn btn-link px-0 mt-3" href="{{reporturl}}">{{#str}}viewreport, qrcodecheck{{/str}}</a>
+                {{/canreport}}
+            </div>
+        </div>
+    {{/canmanage}}
+</div>

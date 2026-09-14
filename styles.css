@@ -1,0 +1,18 @@
+.mod-qrcodecheck-project {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.mod-qrcodecheck-project .qrcodecheck-qr-wrap {
+    width: min(68vh, 560px);
+    max-width: 100%;
+    padding: 1rem;
+    background: #fff;
+    border: 1px solid #dee2e6;
+    border-radius: 1rem;
+}
+
+.mod-qrcodecheck-project .qrcodecheck-qr {
+    width: 100%;
+    image-rendering: pixelated;
+}
