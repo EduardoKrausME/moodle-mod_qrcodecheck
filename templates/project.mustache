@@ -27,7 +27,7 @@
     <p class="lead mb-4">{{#str}}scaninstruction, qrcodecheck{{/str}}</p>
 
     <div class="qrcodecheck-qr-wrap mx-auto mb-3">
-        <img src="{{qrurl}}" class="img-fluid qrcodecheck-qr" alt="{{#str}}qrcodealt, qrcodecheck{{/str}}"
+        <img src="{{{qrurl}}}" class="img-fluid qrcodecheck-qr" alt="{{#str}}qrcodealt, qrcodecheck{{/str}}"
              data-region="qrcode-image">
     </div>
 
@@ -43,7 +43,7 @@
     </div>
 
     <div class="d-flex justify-content-center flex-wrap gap-2 mt-4">
-        <a class="btn btn-outline-secondary" href="{{reporturl}}">{{#str}}viewreport, qrcodecheck{{/str}}</a>
+        <a class="btn btn-outline-secondary" href="{{{reporturl}}}">{{#str}}viewreport, qrcodecheck{{/str}}</a>
         <form method="post" action="{{sessionaction}}">
             <input type="hidden" name="id" value="{{cmid}}">
             <input type="hidden" name="sid" value="{{sid}}">

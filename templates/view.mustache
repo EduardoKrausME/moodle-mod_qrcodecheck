@@ -42,7 +42,7 @@
                 {{#hasactive}}
                     <p>{{#str}}activesession, qrcodecheck{{/str}}: {{sessionstarted}}</p>
                     <div class="d-flex flex-wrap gap-2">
-                        <a class="btn btn-primary" href="{{projecturl}}">{{#str}}openprojection, qrcodecheck{{/str}}</a>
+                        <a class="btn btn-primary" href="{{{projecturl}}}">{{#str}}openprojection, qrcodecheck{{/str}}</a>
                         <form method="post" action="{{sessionaction}}">
                             <input type="hidden" name="id" value="{{cmid}}">
                             <input type="hidden" name="action" value="new">
@@ -61,7 +61,7 @@
                     </form>
                 {{/hasactive}}
                 {{#canreport}}
-                    <a class="btn btn-link px-0 mt-3" href="{{reporturl}}">{{#str}}viewreport, qrcodecheck{{/str}}</a>
+                    <a class="btn btn-link px-0 mt-3" href="{{{reporturl}}}">{{#str}}viewreport, qrcodecheck{{/str}}</a>
                 {{/canreport}}
             </div>
         </div>
