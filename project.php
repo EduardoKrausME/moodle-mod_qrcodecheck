@@ -22,6 +22,10 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+use mod_qrcodecheck\ip;
+use mod_qrcodecheck\session_manager;
+use mod_qrcodecheck\token_manager;
+
 require_once("../../config.php");
 
 $id = required_param("id", PARAM_INT);
@@ -35,14 +39,14 @@ require_capability("mod/qrcodecheck:manage", $context);
 
 $session = $sid
     ? $DB->get_record("qrcodecheck_sessions", ["id" => $sid, "qrcodecheckid" => $qrcodecheck->id], "*", MUST_EXIST)
-    : \mod_qrcodecheck\session_manager::get_active($qrcodecheck->id);
+    : session_manager::get_active($qrcodecheck->id);
 
 if (!$session || !empty($session->endedat)) {
     redirect(new moodle_url("/mod/qrcodecheck/view.php", ["id" => $cm->id]), get_string("nosession", "qrcodecheck"));
 }
 
 if ($session->projectorip === "") {
-    $session->projectorip = \mod_qrcodecheck\ip::current();
+    $session->projectorip = ip::current();
     $DB->set_field("qrcodecheck_sessions", "projectorip", $session->projectorip, ["id" => $session->id]);
 }
 
@@ -52,8 +56,8 @@ $PAGE->set_heading(format_string($qrcodecheck->name));
 $PAGE->requires->js_call_amd("mod_qrcodecheck/project", "init", [
     $cm->id,
     $session->id,
-    \mod_qrcodecheck\token_manager::ROTATE_SECONDS,
-    \mod_qrcodecheck\token_manager::EXPIRE_SECONDS,
+    token_manager::ROTATE_SECONDS,
+    token_manager::EXPIRE_SECONDS,
 ]);
 
 $data = [
@@ -66,8 +70,8 @@ $data = [
     "cmid" => $cm->id,
     "sid" => $session->id,
     "sesskey" => sesskey(),
-    "rotate" => \mod_qrcodecheck\token_manager::ROTATE_SECONDS,
-    "expiry" => \mod_qrcodecheck\token_manager::EXPIRE_SECONDS,
+    "rotate" => token_manager::ROTATE_SECONDS,
+    "expiry" => token_manager::EXPIRE_SECONDS,
 ];
 
 echo $OUTPUT->header();

@@ -22,6 +22,9 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+use mod_qrcodecheck\scan_manager;
+use mod_qrcodecheck\session_manager;
+
 require_once("../../config.php");
 
 $id = required_param("id", PARAM_INT);
@@ -37,8 +40,8 @@ $PAGE->set_url("/mod/qrcodecheck/view.php", ["id" => $cm->id]);
 $PAGE->set_title(format_string($qrcodecheck->name));
 $PAGE->set_heading(format_string($course->fullname));
 
-$active = \mod_qrcodecheck\session_manager::get_active($qrcodecheck->id);
-$record = \mod_qrcodecheck\scan_manager::latest_for_user($qrcodecheck->id, $USER->id);
+$active = session_manager::get_active($qrcodecheck->id);
+$record = scan_manager::latest_for_user($qrcodecheck->id, $USER->id);
 $canmanage = has_capability("mod/qrcodecheck:manage", $context);
 $canreport = has_capability("mod/qrcodecheck:viewreport", $context);
 
@@ -47,13 +50,13 @@ $data = [
     "intro" => format_module_intro("qrcodecheck", $qrcodecheck, $cm->id),
     "canmanage" => $canmanage,
     "canreport" => $canreport,
-    "hasactive" => (bool) $active,
+    "hasactive" => (bool)$active,
     "projecturl" => $active ? (new moodle_url("/mod/qrcodecheck/project.php", ["id" => $cm->id]))->out(false) : "",
     "reporturl" => (new moodle_url("/mod/qrcodecheck/report.php", ["id" => $cm->id]))->out(false),
     "sessionaction" => (new moodle_url("/mod/qrcodecheck/session.php"))->out(false),
     "cmid" => $cm->id,
     "sesskey" => sesskey(),
-    "registered" => (bool) $record,
+    "registered" => (bool)$record,
     "registeredtime" => $record ? userdate($record->scannedat) : "",
 ];
 

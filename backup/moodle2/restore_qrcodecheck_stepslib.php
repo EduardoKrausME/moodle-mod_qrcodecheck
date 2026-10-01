@@ -45,7 +45,7 @@ class restore_qrcodecheck_activity_structure_step extends restore_activity_struc
     protected function process_qrcodecheck($data) {
         global $DB;
 
-        $data = (object) $data;
+        $data = (object)$data;
         $data->course = $this->get_courseid();
         $newid = $DB->insert_record("qrcodecheck", $data);
         $this->apply_activity_instance($newid);
@@ -60,7 +60,7 @@ class restore_qrcodecheck_activity_structure_step extends restore_activity_struc
     protected function process_qrcodecheck_session($data) {
         global $DB;
 
-        $data = (object) $data;
+        $data = (object)$data;
         $oldid = $data->id;
         $data->qrcodecheckid = $this->get_new_parentid("qrcodecheck");
         $data->startedby = $this->get_mappingid("user", $data->startedby);
@@ -79,7 +79,7 @@ class restore_qrcodecheck_activity_structure_step extends restore_activity_struc
     protected function process_qrcodecheck_record($data) {
         global $DB;
 
-        $data = (object) $data;
+        $data = (object)$data;
         $data->qrcodecheckid = $this->get_new_parentid("qrcodecheck");
         $data->sessionid = $this->get_new_parentid("qrcodecheck_session");
         $data->userid = $this->get_mappingid("user", $data->userid);

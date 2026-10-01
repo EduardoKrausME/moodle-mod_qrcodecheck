@@ -16,10 +16,13 @@
 
 namespace mod_qrcodecheck\privacy;
 
+use context;
+use context_module;
 use core_privacy\local\metadata\collection;
 use core_privacy\local\request\approved_contextlist;
 use core_privacy\local\request\approved_userlist;
 use core_privacy\local\request\contextlist;
+use core_privacy\local\request\core_userlist_provider;
 use core_privacy\local\request\transform;
 use core_privacy\local\request\userlist;
 use core_privacy\local\request\writer;
@@ -32,9 +35,9 @@ use core_privacy\local\request\writer;
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class provider implements
-        \core_privacy\local\metadata\provider,
-        \core_privacy\local\request\plugin\provider,
-        \core_privacy\local\request\core_userlist_provider {
+    \core_privacy\local\metadata\provider,
+    \core_privacy\local\request\plugin\provider,
+    core_userlist_provider {
 
     /**
      * Describes stored personal data.
@@ -112,7 +115,7 @@ class provider implements
         }
         $userid = $contextlist->get_user()->id;
         foreach ($contextlist->get_contexts() as $context) {
-            if (!($context instanceof \context_module)) {
+            if (!($context instanceof context_module)) {
                 continue;
             }
             $cm = get_coursemodule_from_id("qrcodecheck", $context->instanceid);
@@ -125,11 +128,11 @@ class provider implements
             ], "scannedat ASC");
             $export = [];
             foreach ($records as $record) {
-                $export[] = (object) [
+                $export[] = (object)[
                     "scannedat" => transform::datetime($record->scannedat),
                     "ipaddress" => $record->ipaddress,
                     "projectorip" => $record->projectorip,
-                    "ipmatch" => (bool) $record->ipmatch,
+                    "ipmatch" => (bool)$record->ipmatch,
                 ];
             }
             $sessions = $DB->get_records("qrcodecheck_sessions", [
@@ -138,13 +141,13 @@ class provider implements
             ], "startedat ASC");
             $sessionexport = [];
             foreach ($sessions as $session) {
-                $sessionexport[] = (object) [
+                $sessionexport[] = (object)[
                     "startedat" => transform::datetime($session->startedat),
                     "endedat" => $session->endedat ? transform::datetime($session->endedat) : null,
                     "projectorip" => $session->projectorip,
                 ];
             }
-            writer::with_context($context)->export_data([], (object) [
+            writer::with_context($context)->export_data([], (object)[
                 "records" => $export,
                 "sessions" => $sessionexport,
             ]);
@@ -154,13 +157,13 @@ class provider implements
     /**
      * Deletes all user data from a module context.
      *
-     * @param \context $context Context.
+     * @param context $context Context.
      * @return void
      */
-    public static function delete_data_for_all_users_in_context(\context $context): void {
+    public static function delete_data_for_all_users_in_context(context $context): void {
         global $DB;
 
-        if (!($context instanceof \context_module)) {
+        if (!($context instanceof context_module)) {
             return;
         }
         $cm = get_coursemodule_from_id("qrcodecheck", $context->instanceid);
@@ -183,7 +186,7 @@ class provider implements
 
         $userid = $contextlist->get_user()->id;
         foreach ($contextlist->get_contexts() as $context) {
-            if (!($context instanceof \context_module)) {
+            if (!($context instanceof context_module)) {
                 continue;
             }
             $cm = get_coursemodule_from_id("qrcodecheck", $context->instanceid);
@@ -227,7 +230,7 @@ class provider implements
         global $DB;
 
         $context = $userlist->get_context();
-        if (!($context instanceof \context_module)) {
+        if (!($context instanceof context_module)) {
             return;
         }
         $cm = get_coursemodule_from_id("qrcodecheck", $context->instanceid);
@@ -252,7 +255,7 @@ class provider implements
         global $DB;
 
         $context = $userlist->get_context();
-        if (!($context instanceof \context_module)) {
+        if (!($context instanceof context_module)) {
             return;
         }
         $cm = get_coursemodule_from_id("qrcodecheck", $context->instanceid);

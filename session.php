@@ -22,6 +22,8 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+use mod_qrcodecheck\session_manager;
+
 require_once("../../config.php");
 
 $id = required_param("id", PARAM_INT);
@@ -36,13 +38,13 @@ $context = context_module::instance($cm->id);
 require_capability("mod/qrcodecheck:manage", $context);
 
 if ($action === "start" || $action === "new") {
-    $session = \mod_qrcodecheck\session_manager::start($qrcodecheck->id, $USER->id);
+    $session = session_manager::start($qrcodecheck->id, $USER->id);
     redirect(new moodle_url("/mod/qrcodecheck/project.php", ["id" => $cm->id, "sid" => $session->id]));
 }
 
 if ($action === "end") {
     $sid = required_param("sid", PARAM_INT);
-    \mod_qrcodecheck\session_manager::end($sid, $qrcodecheck->id);
+    session_manager::end($sid, $qrcodecheck->id);
     redirect(new moodle_url("/mod/qrcodecheck/view.php", ["id" => $cm->id]), get_string("sessionended", "qrcodecheck"));
 }
 

@@ -16,6 +16,8 @@
 
 namespace mod_qrcodecheck;
 
+use stdClass;
+
 /**
  * Activity instance manager.
  *
@@ -27,10 +29,10 @@ class manager {
     /**
      * Creates an instance.
      *
-     * @param \stdClass $data Data.
+     * @param stdClass $data Data.
      * @return int
      */
-    public static function create(\stdClass $data): int {
+    public static function create(stdClass $data): int {
         global $DB;
 
         $now = time();
@@ -43,10 +45,10 @@ class manager {
     /**
      * Updates an instance.
      *
-     * @param \stdClass $data Data.
+     * @param stdClass $data Data.
      * @return bool
      */
-    public static function update(\stdClass $data): bool {
+    public static function update(stdClass $data): bool {
         global $DB;
 
         $data->id = $data->instance;

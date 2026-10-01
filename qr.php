@@ -22,6 +22,8 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+use mod_qrcodecheck\token_manager;
+
 require_once("../../config.php");
 
 $id = required_param("id", PARAM_INT);
@@ -39,7 +41,7 @@ $session = $DB->get_record("qrcodecheck_sessions", [
     "endedat" => 0,
 ], "*", MUST_EXIST);
 
-$url = \mod_qrcodecheck\token_manager::scan_url($session)->out(false);
+$url = token_manager::scan_url($session)->out(false);
 $qrcode = new core_qrcode($url);
 $png = $qrcode->getBarcodePngData(10, 10);
 

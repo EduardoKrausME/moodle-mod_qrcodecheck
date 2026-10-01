@@ -16,6 +16,8 @@
 
 namespace mod_qrcodecheck\task;
 
+use core\task\scheduled_task;
+
 /**
  * Removes old pending scan rows.
  *
@@ -23,7 +25,7 @@ namespace mod_qrcodecheck\task;
  * @copyright 2026 Eduardo Kraus {@link https://eduardokraus.com}
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class cleanup_pending extends \core\task\scheduled_task {
+class cleanup_pending extends scheduled_task {
     /**
      * Task name.
      *

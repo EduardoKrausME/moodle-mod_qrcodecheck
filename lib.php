@@ -22,6 +22,8 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+use mod_qrcodecheck\manager;
+
 /**
  * Returns supported Moodle features.
  *
@@ -48,7 +50,7 @@ function qrcodecheck_supports($feature) {
  * @return int
  */
 function qrcodecheck_add_instance($data, $mform = null) {
-    return \mod_qrcodecheck\manager::create($data);
+    return manager::create($data);
 }
 
 /**
@@ -59,7 +61,7 @@ function qrcodecheck_add_instance($data, $mform = null) {
  * @return bool
  */
 function qrcodecheck_update_instance($data, $mform = null) {
-    return \mod_qrcodecheck\manager::update($data);
+    return manager::update($data);
 }
 
 /**
@@ -69,7 +71,7 @@ function qrcodecheck_update_instance($data, $mform = null) {
  * @return bool
  */
 function qrcodecheck_delete_instance($id) {
-    return \mod_qrcodecheck\manager::delete($id);
+    return manager::delete($id);
 }
 
 /**
@@ -94,7 +96,7 @@ function qrcodecheck_get_coursemodule_info($coursemodule) {
     $info->name = $instance->name;
     $info->customdata = [];
     if ($coursemodule->completion == COMPLETION_TRACKING_AUTOMATIC) {
-        $info->customdata["customcompletionrules"]["completionscan"] = (bool) $instance->completionscan;
+        $info->customdata["customcompletionrules"]["completionscan"] = (bool)$instance->completionscan;
     }
 
     return $info;

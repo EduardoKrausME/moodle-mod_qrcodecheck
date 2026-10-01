@@ -22,6 +22,8 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+use core\output\notification;
+
 require_once("../../config.php");
 require_once("{$CFG->libdir}/tablelib.php");
 
@@ -39,7 +41,7 @@ if ($sid) {
 } else {
     $sessions = $DB->get_records("qrcodecheck_sessions", ["qrcodecheckid" => $qrcodecheck->id], "startedat DESC", "*", 0, 1);
     $session = $sessions ? reset($sessions) : null;
-    $sid = $session ? (int) $session->id : 0;
+    $sid = $session ? (int)$session->id : 0;
 }
 
 $PAGE->set_url("/mod/qrcodecheck/report.php", ["id" => $cm->id, "sid" => $sid]);
@@ -113,14 +115,14 @@ if ($sessionoptions) {
 }
 
 if ($session) {
-    echo html_writer::div(get_string("reportsummary", "qrcodecheck", (object) [
+    echo html_writer::div(get_string("reportsummary", "qrcodecheck", (object)[
         "total" => $total,
         "same" => $total - $different,
         "different" => $different,
     ]), "alert alert-info mt-3");
     $table->finish_output();
 } else {
-    echo $OUTPUT->notification(get_string("nosessionsyet", "qrcodecheck"), \core\output\notification::NOTIFY_INFO);
+    echo $OUTPUT->notification(get_string("nosessionsyet", "qrcodecheck"), notification::NOTIFY_INFO);
 }
 
 echo $OUTPUT->footer();

@@ -16,6 +16,8 @@
 
 namespace mod_qrcodecheck;
 
+use stdClass;
+
 /**
  * Projection session manager.
  *
@@ -29,9 +31,9 @@ class session_manager {
      *
      * @param int $qrcodecheckid Activity id.
      * @param int $userid Teacher id.
-     * @return \stdClass
+     * @return stdClass
      */
-    public static function start(int $qrcodecheckid, int $userid): \stdClass {
+    public static function start(int $qrcodecheckid, int $userid): stdClass {
         global $DB;
 
         $transaction = $DB->start_delegated_transaction();
@@ -44,7 +46,7 @@ class session_manager {
             ["qid" => $qrcodecheckid]
         );
 
-        $record = (object) [
+        $record = (object)[
             "qrcodecheckid" => $qrcodecheckid,
             "startedby" => $userid,
             "startedat" => $now,
@@ -62,9 +64,9 @@ class session_manager {
      * Returns the active session.
      *
      * @param int $qrcodecheckid Activity id.
-     * @return \stdClass|null
+     * @return stdClass|null
      */
-    public static function get_active(int $qrcodecheckid): ?\stdClass {
+    public static function get_active(int $qrcodecheckid): ?stdClass {
         global $DB;
 
         $record = $DB->get_record(

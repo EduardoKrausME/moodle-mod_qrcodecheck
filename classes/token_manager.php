@@ -16,6 +16,9 @@
 
 namespace mod_qrcodecheck;
 
+use moodle_url;
+use stdClass;
+
 /**
  * Rotating QR token manager.
  *
@@ -38,17 +41,17 @@ class token_manager {
      */
     public static function slot(?int $time = null): int {
         $time = $time ?? time();
-        return (int) floor($time / self::ROTATE_SECONDS);
+        return (int)floor($time / self::ROTATE_SECONDS);
     }
 
     /**
      * Creates the token signature for a session and slot.
      *
-     * @param \stdClass $session Session.
+     * @param stdClass $session Session.
      * @param int $slot Slot.
      * @return string
      */
-    public static function signature(\stdClass $session, int $slot): string {
+    public static function signature(stdClass $session, int $slot): string {
         $payload = $session->id . ":" . $slot;
         return hash_hmac("sha256", $payload, $session->secret);
     }
@@ -56,13 +59,13 @@ class token_manager {
     /**
      * Validates a QR token without requiring a logged in user.
      *
-     * @param \stdClass $session Session.
+     * @param stdClass $session Session.
      * @param int $slot Slot from QR.
      * @param string $token Token from QR.
      * @param int|null $now Current timestamp.
      * @return bool
      */
-    public static function validate(\stdClass $session, int $slot, string $token, ?int $now = null): bool {
+    public static function validate(stdClass $session, int $slot, string $token, ?int $now = null): bool {
         $now = $now ?? time();
         if (!empty($session->endedat)) {
             return false;
@@ -79,12 +82,12 @@ class token_manager {
     /**
      * Builds the current scan URL.
      *
-     * @param \stdClass $session Session.
-     * @return \moodle_url
+     * @param stdClass $session Session.
+     * @return moodle_url
      */
-    public static function scan_url(\stdClass $session): \moodle_url {
+    public static function scan_url(stdClass $session): moodle_url {
         $slot = self::slot();
-        return new \moodle_url("/mod/qrcodecheck/scan.php", [
+        return new moodle_url("/mod/qrcodecheck/scan.php", [
             "s" => $session->id,
             "slot" => $slot,
             "t" => self::signature($session, $slot),

@@ -31,7 +31,7 @@ class ip {
      */
     public static function current(): string {
         $address = getremoteaddr();
-        return $address === null ? "" : (string) $address;
+        return $address === null ? "" : (string)$address;
     }
 
     /**

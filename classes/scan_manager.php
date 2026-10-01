@@ -16,6 +16,9 @@
 
 namespace mod_qrcodecheck;
 
+use moodle_exception;
+use stdClass;
+
 /**
  * Scan and attendance manager.
  *
@@ -30,14 +33,14 @@ class scan_manager {
     /**
      * Records the QR click before Moodle login is required.
      *
-     * @param \stdClass $session Session.
+     * @param stdClass $session Session.
      * @param string $key Plain one-time pending key.
-     * @return \stdClass
+     * @return stdClass
      */
-    public static function create_pending(\stdClass $session, string $key): \stdClass {
+    public static function create_pending(stdClass $session, string $key): stdClass {
         global $DB;
 
-        $record = (object) [
+        $record = (object)[
             "qrcodecheckid" => $session->qrcodecheckid,
             "sessionid" => $session->id,
             "keyhash" => hash("sha256", $key),
@@ -57,17 +60,17 @@ class scan_manager {
      *
      * @param int $pendingid Pending id.
      * @param string $key Plain key.
-     * @return \stdClass
+     * @return stdClass
      */
-    public static function get_valid_pending(int $pendingid, string $key): \stdClass {
+    public static function get_valid_pending(int $pendingid, string $key): stdClass {
         global $DB;
 
         $pending = $DB->get_record("qrcodecheck_pending", ["id" => $pendingid], "*", MUST_EXIST);
         if ($pending->status !== "pending" || !hash_equals($pending->keyhash, hash("sha256", $key))) {
-            throw new \moodle_exception("invalidpending", "qrcodecheck");
+            throw new moodle_exception("invalidpending", "qrcodecheck");
         }
-        if ((time() - (int) $pending->scannedat) > self::LOGIN_GRACE_SECONDS) {
-            throw new \moodle_exception("pendingexpired", "qrcodecheck");
+        if ((time() - (int)$pending->scannedat) > self::LOGIN_GRACE_SECONDS) {
+            throw new moodle_exception("pendingexpired", "qrcodecheck");
         }
         return $pending;
     }
@@ -75,11 +78,11 @@ class scan_manager {
     /**
      * Finalizes a pending scan for the authenticated user.
      *
-     * @param \stdClass $pending Pending scan.
+     * @param stdClass $pending Pending scan.
      * @param int $userid User id.
-     * @return \stdClass Attendance record.
+     * @return stdClass Attendance record.
      */
-    public static function finalize(\stdClass $pending, int $userid): \stdClass {
+    public static function finalize(stdClass $pending, int $userid): stdClass {
         global $DB;
 
         $session = $DB->get_record("qrcodecheck_sessions", ["id" => $pending->sessionid], "*", MUST_EXIST);
@@ -90,7 +93,7 @@ class scan_manager {
 
         $transaction = $DB->start_delegated_transaction();
         if (!$existing) {
-            $record = (object) [
+            $record = (object)[
                 "qrcodecheckid" => $pending->qrcodecheckid,
                 "sessionid" => $pending->sessionid,
                 "userid" => $userid,
@@ -120,9 +123,9 @@ class scan_manager {
      *
      * @param int $qrcodecheckid Activity id.
      * @param int $userid User id.
-     * @return \stdClass|null
+     * @return stdClass|null
      */
-    public static function latest_for_user(int $qrcodecheckid, int $userid): ?\stdClass {
+    public static function latest_for_user(int $qrcodecheckid, int $userid): ?stdClass {
         global $DB;
 
         $records = $DB->get_records(

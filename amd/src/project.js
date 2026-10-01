@@ -21,10 +21,10 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-define(["jquery"], function($) {
+define(["jquery"], function ($) {
     "use strict";
 
-    const init = function(cmid, sessionid, rotateSeconds) {
+    const init = function (cmid, sessionid, rotateSeconds) {
         const $root = $("[data-region='qrcodecheck-project']");
         if (!$root.length) {
             return;
@@ -34,7 +34,7 @@ define(["jquery"], function($) {
         const $countdown = $root.find("[data-region='qrcode-countdown']");
         let lastSlot = Math.floor(Date.now() / 1000 / rotateSeconds);
 
-        const tick = function() {
+        const tick = function () {
             const nowSeconds = Math.floor(Date.now() / 1000);
             const slot = Math.floor(nowSeconds / rotateSeconds);
             let remaining = rotateSeconds - (nowSeconds % rotateSeconds);

@@ -25,6 +25,11 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+use core\output\notification;
+use mod_qrcodecheck\event\attendance_registered;
+use mod_qrcodecheck\scan_manager;
+use mod_qrcodecheck\token_manager;
+
 require_once("../../config.php");
 
 global $SESSION;
@@ -33,7 +38,7 @@ $pendingid = optional_param("p", 0, PARAM_INT);
 $key = optional_param("k", "", PARAM_ALPHANUM);
 
 if ($pendingid && $key !== "") {
-    $pending = \mod_qrcodecheck\scan_manager::get_valid_pending($pendingid, $key);
+    $pending = scan_manager::get_valid_pending($pendingid, $key);
     $browserkey = $SESSION->qrcodecheck_pending[$pendingid] ?? "";
     if ($browserkey === "" || !hash_equals($browserkey, hash("sha256", $key))) {
         throw new moodle_exception("invalidbrowser", "qrcodecheck");
@@ -46,10 +51,10 @@ if ($pendingid && $key !== "") {
     $context = context_module::instance($cm->id);
     require_capability("mod/qrcodecheck:view", $context);
 
-    $record = \mod_qrcodecheck\scan_manager::finalize($pending, $USER->id);
+    $record = scan_manager::finalize($pending, $USER->id);
     unset($SESSION->qrcodecheck_pending[$pendingid]);
 
-    $event = \mod_qrcodecheck\event\attendance_registered::create([
+    $event = attendance_registered::create([
         "objectid" => $record->id,
         "context" => $context,
         "userid" => $USER->id,
@@ -66,7 +71,7 @@ if ($pendingid && $key !== "") {
         new moodle_url("/mod/qrcodecheck/view.php", ["id" => $cm->id]),
         get_string("registeredok", "qrcodecheck"),
         null,
-        \core\output\notification::NOTIFY_SUCCESS
+        notification::NOTIFY_SUCCESS
     );
 }
 
@@ -75,12 +80,12 @@ $slot = required_param("slot", PARAM_INT);
 $token = required_param("t", PARAM_ALPHANUM);
 
 $session = $DB->get_record("qrcodecheck_sessions", ["id" => $sid], "*", MUST_EXIST);
-if (!\mod_qrcodecheck\token_manager::validate($session, $slot, $token)) {
+if (!token_manager::validate($session, $slot, $token)) {
     throw new moodle_exception("qrexpired", "qrcodecheck");
 }
 
 $key = bin2hex(random_bytes(24));
-$pending = \mod_qrcodecheck\scan_manager::create_pending($session, $key);
+$pending = scan_manager::create_pending($session, $key);
 if (!isset($SESSION->qrcodecheck_pending) || !is_array($SESSION->qrcodecheck_pending)) {
     $SESSION->qrcodecheck_pending = [];
 }

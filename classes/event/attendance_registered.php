@@ -16,6 +16,9 @@
 
 namespace mod_qrcodecheck\event;
 
+use core\event\base;
+use moodle_url;
+
 /**
  * Attendance registered event.
  *
@@ -23,7 +26,7 @@ namespace mod_qrcodecheck\event;
  * @copyright 2026 Eduardo Kraus {@link https://eduardokraus.com}
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class attendance_registered extends \core\event\base {
+class attendance_registered extends base {
     /**
      * Initializes the event.
      *
@@ -56,9 +59,9 @@ class attendance_registered extends \core\event\base {
     /**
      * URL for the event.
      *
-     * @return \moodle_url
+     * @return moodle_url
      */
     public function get_url() {
-        return new \moodle_url("/mod/qrcodecheck/view.php", ["id" => $this->contextinstanceid]);
+        return new moodle_url("/mod/qrcodecheck/view.php", ["id" => $this->contextinstanceid]);
     }
 }
