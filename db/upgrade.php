@@ -29,5 +29,34 @@
  * @return bool
  */
 function xmldb_qrcodecheck_upgrade($oldversion) {
+    global $DB;
+
+    if ($oldversion < 2026100501) {
+        // QR scan is the only automatic completion rule supported by this activity.
+        // Repair instances left in an impossible state by older versions:
+        // automatic completion enabled in course_modules while completionscan is disabled.
+        $sql = "SELECT DISTINCT q.id
+                  FROM {qrcodecheck} q
+                  JOIN {course_modules} cm
+                    ON cm.instance = q.id
+                  JOIN {modules} m
+                    ON m.id = cm.module
+                 WHERE m.name = :modname
+                   AND cm.completion = :completion
+                   AND cm.deletioninprogress = 0
+                   AND q.completionscan = 0";
+        $instanceids = $DB->get_fieldset_sql($sql, [
+            "modname" => "qrcodecheck",
+            "completion" => COMPLETION_TRACKING_AUTOMATIC,
+        ]);
+
+        if ($instanceids) {
+            [$insql, $params] = $DB->get_in_or_equal($instanceids, SQL_PARAMS_NAMED, "instance");
+            $DB->set_field_select("qrcodecheck", "completionscan", 1, "id {$insql}", $params);
+        }
+
+        upgrade_mod_savepoint(true, 2026100501, "qrcodecheck");
+    }
+
     return true;
 }
