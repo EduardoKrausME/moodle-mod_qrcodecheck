@@ -101,18 +101,3 @@ function qrcodecheck_get_coursemodule_info($coursemodule) {
 
     return $info;
 }
-
-/**
- * Returns human-readable descriptions for active custom completion rules.
- *
- * @param cm_info|stdClass $cm Course module information.
- * @return array
- */
-function mod_qrcodecheck_get_completion_active_rule_descriptions($cm): array {
-    if ($cm->completion != COMPLETION_TRACKING_AUTOMATIC
-            || empty($cm->customdata["customcompletionrules"]["completionscan"])) {
-        return [];
-    }
-
-    return [get_string("completionscan", "qrcodecheck")];
-}
