@@ -21,6 +21,14 @@
  * @copyright 2026 Eduardo Kraus {@link https://eduardokraus.com}
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+
+defined('MOODLE_INTERNAL') || die;
+
+require_once("{$CFG->dirroot}/mod/qrcodecheck/backup/moodle2/restore_qrcodecheck_stepslib.php");
+
+/**
+ * Restore task.
+ */
 class restore_qrcodecheck_activity_task extends restore_activity_task {
     /**
      * Defines activity-specific settings.
