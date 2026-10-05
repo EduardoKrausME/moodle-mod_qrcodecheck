@@ -41,7 +41,7 @@ class manager {
 
         if (property_exists($data, "completionscan")) {
             $data->completionscan = empty($data->completionscan) ? 0 : 1;
-        } else if (($data->completion ?? COMPLETION_TRACKING_NONE) == COMPLETION_TRACKING_AUTOMATIC) {
+        } elseif (($data->completion ?? COMPLETION_TRACKING_NONE) == COMPLETION_TRACKING_AUTOMATIC) {
             // Programmatic creation does not pass through mod_form, so mirror the form default.
             $data->completionscan = 1;
         } else {
