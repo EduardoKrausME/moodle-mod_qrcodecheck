@@ -36,6 +36,14 @@ require_login($course, true, $cm);
 $context = context_module::instance($cm->id);
 require_capability("mod/qrcodecheck:view", $context);
 
+$event = \mod_qrcodecheck\event\course_module_viewed::create([
+    "objectid" => $qrcodecheck->id,
+    "context" => $context,
+]);
+$event->add_record_snapshot("course", $course);
+$event->add_record_snapshot("qrcodecheck", $qrcodecheck);
+$event->trigger();
+
 $PAGE->set_url("/mod/qrcodecheck/view.php", ["id" => $cm->id]);
 $PAGE->set_title(format_string($qrcodecheck->name));
 $PAGE->set_heading(format_string($course->fullname));

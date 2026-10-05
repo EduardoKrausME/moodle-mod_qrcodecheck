@@ -14,17 +14,33 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+namespace mod_qrcodecheck\event;
+
 /**
- * Plugin version.
+ * Course module viewed event.
  *
- * @package   mod_qrcodecheck
+ * @package mod_qrcodecheck
  * @copyright 2026 Eduardo Kraus {@link https://eduardokraus.com}
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+class course_module_viewed extends \core\event\course_module_viewed {
+    /**
+     * Initializes the event.
+     *
+     * @return void
+     */
+    protected function init() {
+        $this->data["objecttable"] = "qrcodecheck";
+        $this->data["crud"] = "r";
+        $this->data["edulevel"] = self::LEVEL_PARTICIPATING;
+    }
 
-defined('MOODLE_INTERNAL') || die;
-$plugin->version = 2026100503;
-$plugin->release = '1.1.4';
-$plugin->component = "mod_qrcodecheck";
-$plugin->requires = 2024100700;
-$plugin->maturity = MATURITY_STABLE;
+    /**
+     * Returns the activity mapping used when restoring logs.
+     *
+     * @return array
+     */
+    public static function get_objectid_mapping() {
+        return ["db" => "qrcodecheck", "restore" => "qrcodecheck"];
+    }
+}

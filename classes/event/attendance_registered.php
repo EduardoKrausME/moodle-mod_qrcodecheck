@@ -39,6 +39,26 @@ class attendance_registered extends base {
     }
 
     /**
+     * Returns the mapping for the attendance record.
+     *
+     * @return array
+     */
+    public static function get_objectid_mapping() {
+        return ["db" => "qrcodecheck_records", "restore" => "qrcodecheck_record"];
+    }
+
+    /**
+     * Returns mappings for identifiers stored in other.
+     *
+     * @return array
+     */
+    public static function get_other_mapping() {
+        return [
+            "sessionid" => ["db" => "qrcodecheck_sessions", "restore" => "qrcodecheck_session"],
+        ];
+    }
+
+    /**
      * Event name.
      *
      * @return string

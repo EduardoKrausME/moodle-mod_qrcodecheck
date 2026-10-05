@@ -1,23 +1,31 @@
-# mod_qrcodecheck - Registro por QR Code
+# QR Code Check
 
-Atividade Moodle para registrar presença ou participação usando um QR Code temporário projetado pelo professor.
+QR Code Check is a Moodle activity for recording attendance or participation through a short-lived QR code displayed by a teacher. Each projection is treated as an independent attendance session, while Moodle capabilities control who can manage sessions, view reports and register participation.
 
-## Como funciona
+## How it works
 
-- o QR muda a cada **10 segundos**;
-- cada QR é aceito por no máximo **20 segundos** a partir da geração;
-- o link chega primeiro em `scan.php` e uma leitura válida é persistida antes da autenticação;
-- se o aluno ainda não estiver autenticado, recebe uma continuação temporária de uso único para concluir o login mesmo
-  depois de o QR original expirar;
-- a continuação do login expira em 15 minutos e fica vinculada à mesma sessão anônima do navegador que leu o QR;
-- cada projeção é tratada como uma sessão separada;
-- o IP do computador do professor ou projetor é salvo no início da sessão;
-- o relatório compara o IP observado no clique do aluno com o IP de referência e destaca registros feitos em IP
-  diferente;
-- apenas o primeiro registro confirmado de cada aluno em cada sessão é mantido;
-- leituras pendentes antigas são removidas automaticamente por tarefa agendada.
+- The projected QR code changes every **10 seconds** and each generated code is accepted for at most **20 seconds**.
+- A valid scan reaches `scan.php` and is persisted before authentication, so a student who still needs to sign in does not lose the original scan.
+- After a valid anonymous scan, the student receives a one-time continuation that remains valid for up to **15 minutes** and is bound to the same anonymous browser session.
+- The teacher or projector IP address is saved when a projection session starts.
+- The report compares the IP observed during the student's scan with the session reference IP and highlights records made from a different IP.
+- Only the first confirmed attendance record for each student in each session is kept.
+- Old pending scans are removed automatically by the scheduled task.
 
-## Privacidade
+## Activity and completion
 
-O plugin armazena o horário da leitura, o IP do aluno e o IP de referência da sessão. Esses dados são declarados na
-Privacy API do Moodle.
+The activity uses Moodle's standard activity settings and includes a custom completion rule that can mark the activity complete after the student successfully registers a QR scan. Teachers with the appropriate capabilities can start and end projection sessions and access the attendance report.
+
+## Backup and restore
+
+Course backup, restore, import and activity duplication preserve QR Code Check sessions and attendance records when user data is included. Historical restored sessions are closed and receive a new secret, so an old projected QR code cannot become valid again after restoration.
+
+## Privacy
+
+The plugin stores the scan time, the student's IP address and the reference IP address for the projection session. These data are declared through Moodle's Privacy API.
+
+## Screenshots
+
+![QR Code Check](https://raw.githubusercontent.com/EduardoKrausME/marketplace-plugins/master/screenshots/mod_qrcodecheck/new-1.png)
+
+![QR Code Check activity](https://raw.githubusercontent.com/EduardoKrausME/marketplace-plugins/master/screenshots/mod_qrcodecheck/new-2.png)

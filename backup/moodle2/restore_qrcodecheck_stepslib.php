@@ -80,10 +80,12 @@ class restore_qrcodecheck_activity_structure_step extends restore_activity_struc
         global $DB;
 
         $data = (object)$data;
+        $oldid = $data->id;
         $data->qrcodecheckid = $this->get_new_parentid("qrcodecheck");
         $data->sessionid = $this->get_new_parentid("qrcodecheck_session");
         $data->userid = $this->get_mappingid("user", $data->userid);
-        $DB->insert_record("qrcodecheck_records", $data);
+        $newid = $DB->insert_record("qrcodecheck_records", $data);
+        $this->set_mapping("qrcodecheck_record", $oldid, $newid);
     }
 
     /**
