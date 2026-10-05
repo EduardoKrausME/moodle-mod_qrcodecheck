@@ -64,6 +64,7 @@ class mod_qrcodecheck_mod_form extends moodleform_mod {
             get_string("completionscan", "qrcodecheck")
         );
         $mform->addHelpButton($field, "completionscan", "qrcodecheck");
+        $mform->setDefault($field, 1);
         return [$field];
     }
 
