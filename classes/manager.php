@@ -38,16 +38,7 @@ class manager {
         $now = time();
         $data->timecreated = $now;
         $data->timemodified = $now;
-
-        if (property_exists($data, "completionscan")) {
-            $data->completionscan = empty($data->completionscan) ? 0 : 1;
-        } elseif (($data->completion ?? COMPLETION_TRACKING_NONE) == COMPLETION_TRACKING_AUTOMATIC) {
-            // Programmatic creation does not pass through mod_form, so mirror the form default.
-            $data->completionscan = 1;
-        } else {
-            $data->completionscan = 0;
-        }
-
+        $data->completionscan = empty($data->completionscan) ? 0 : 1;
         return $DB->insert_record("qrcodecheck", $data);
     }
 
@@ -62,11 +53,7 @@ class manager {
 
         $data->id = $data->instance;
         $data->timemodified = time();
-
-        if (property_exists($data, "completionscan")) {
-            $data->completionscan = empty($data->completionscan) ? 0 : 1;
-        }
-
+        $data->completionscan = empty($data->completionscan) ? 0 : 1;
         return $DB->update_record("qrcodecheck", $data);
     }
 
