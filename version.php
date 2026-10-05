@@ -23,7 +23,7 @@
  */
 
 defined('MOODLE_INTERNAL') || die;
-$plugin->version = 2026100501;
+$plugin->version = 2026100502;
 $plugin->release = '1.1.3';
 $plugin->component = "mod_qrcodecheck";
 $plugin->requires = 2024100700;
